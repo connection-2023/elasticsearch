@@ -1,55 +1,25 @@
-version: "2.2"
+version: "3.7"
 services:
-  es01:
+  elasticsearch:
     build:
       context: elasticsearch/
     volumes:
       - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - data01:/usr/share/elasticsearch/data
-    container_name: es01
-    environment:
-      - node.name=es01
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es02
-      - cluster.initial_master_nodes=es01,es02
-      # - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+      - elasticsearch:/usr/share/elasticsearch/data:Z
+
     ports:
       - 9200:9200
-    networks:
-      - elastic
-    restart: unless-stopped
-
-  es02:
-    build:
-      context: elasticsearch/
-    volumes:
-      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - data02:/usr/share/elasticsearch/data
-    container_name: es02
     environment:
-      - node.name=es02
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01
-      - cluster.initial_master_nodes=es01,es02
-      # - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+      - node.name=elasticsearch
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ELASTIC_PASSWORD=test123
+      - discovery.type=single-node
     networks:
-      - elastic
+      - elk
     restart: unless-stopped
 
 volumes:
-  data01:
-  data02:
-
+  elasticsearch:
 networks:
-  elastic:
+  elk:
     driver: bridge
