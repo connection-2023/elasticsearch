@@ -8,10 +8,10 @@ services:
       - elasticsearch:/usr/share/elasticsearch/data:Z
 
     ports:
-      - 9200:9200
+      - ${OUT_PORT}:${IN_PORT}
     environment:
       - node.name=elasticsearch
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - ES_JAVA_OPTS=-${XMS} -${XMX}
       - discovery.type=single-node
     networks:
       - elk
