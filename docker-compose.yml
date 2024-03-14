@@ -11,8 +11,7 @@ services:
       - 9200:9200
     environment:
       - node.name=elasticsearch
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-      - ELASTIC_PASSWORD=test123
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
       - discovery.type=single-node
     networks:
       - elk
